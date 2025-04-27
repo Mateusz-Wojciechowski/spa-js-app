@@ -1,5 +1,5 @@
 window.onloadRecaptcha = () => {
-  // Widget renderujemy manualnie w RenderContactPage
+
 };
 
 // — SPA ROUTER —
@@ -120,41 +120,49 @@ function RenderGalleryPage() {
   document.querySelector('main').innerHTML = `
     <section class="gallery-header">
       <h1 class="title">Our Gallery</h1>
-      <p>A glimpse into the adventures that await you with Horizon Travels</p>
+      <p>Scroll down to discover our destinations, experiences, and travel moments</p>
+      <p class="lazy-load-notice"><i class="fas fa-info-circle"></i> Images load progressively as you scroll - keep scrolling to see more!</p>
     </section>
     
-    <h2 class="gallery-category">Popular Destinations</h2>
+    <h2 class="gallery-category">Spectacular Destinations</h2>
     <div class="gallery-grid" id="destinations-gallery"></div>
     
-    <h2 class="gallery-category">Our Team and Recent Trips</h2>
-    <div class="gallery-grid" id="team-gallery"></div>
   `;
   
-  // Populate destination gallery
-  const destinationsGallery = document.getElementById('destinations-gallery');
+  // Create arrays for all our images
   const destinationImages = [
     { src: './images/image-1.jpg', alt: 'Tropical beach paradise in Bali' },
-    { src: './images/image-2.jpg', alt: 'Ancient ruins in Machu Picchu' },
-    { src: './images/image-3.jpg', alt: 'Colorful markets in Marrakech' },
-    { src: './images/image-4.jpg', alt: 'Cherry blossoms in Kyoto' }
+    { src: './images/image-2.jpg', alt: 'Ancient ruins of Machu Picchu at sunrise' },
+    { src: './images/image-3.jpg', alt: 'Cherry blossoms in Kyoto, Japan' },
+    { src: './images/image-4.jpg', alt: 'Santorini white houses with blue domes' },
+    { src: './images/image-5.jpg', alt: 'Northern Lights over Iceland' },
+    { src: './images/image-6.jpg', alt: 'Serengeti National Park wildlife' },
+    { src: './images/image-7.jpg', alt: 'Amalfi Coast cliffside villages' },
+    { src: './images/image-8.jpg', alt: 'Great Barrier Reef coral formations' },
+    { src: './images/image-9.jpg', alt: 'Snow-capped peaks of the Swiss Alps' }
   ];
   
-  // Populate team gallery
-  const teamGallery = document.getElementById('team-gallery');
-  const teamImages = [
-    { src: './images/image-5.jpg', alt: 'Our team exploring Santorini' },
-    { src: './images/image-6.jpg', alt: 'Team building retreat in the Alps' },
-    { src: './images/image-7.jpg', alt: 'Local guide with tourists in Bangkok' },
-    { src: './images/image-8.jpg', alt: 'Safari adventure in Kenya' },
-    { src: './images/image-9.jpg', alt: 'Hiking expedition in Patagonia' }
-  ];
 
-  // Add images to both galleries
-  addImagesToGallery(destinationImages, destinationsGallery);
-  addImagesToGallery(teamImages, teamGallery);
-  
+  // Add images to all galleries
+  addImagesToGallery(destinationImages, document.getElementById('destinations-gallery'));
+
   // Initialize lazy loading after all placeholders are created
   initLazyLoading();
+  
+  // Add some extra content at the bottom
+  const main = document.querySelector('main');
+  const extraContent = document.createElement('div');
+  extraContent.className = 'gallery-footer';
+  extraContent.innerHTML = `
+    <h3>Share Your Adventures</h3>
+    <p>Tag us on social media with #HorizonTravels for a chance to be featured in our gallery!</p>
+    <div class="back-to-top">
+      <button id="back-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i class="fas fa-arrow-up"></i> Back to Top
+      </button>
+    </div>
+  `;
+  main.appendChild(extraContent);
 }
 
 function addImagesToGallery(imageArray, galleryElement) {
@@ -162,14 +170,25 @@ function addImagesToGallery(imageArray, galleryElement) {
     const imgContainer = document.createElement('div');
     imgContainer.classList.add('img-container');
     
+    // Create a placeholder div
+    const placeholder = document.createElement('div');
+    placeholder.classList.add('image-placeholder');
+    
+    // Create the image element but set only the data-src attribute
     const img = document.createElement('img');
-    img.dataset.src = image.src;
+    img.dataset.src = image.src; // Store the real image URL here
     img.alt = image.alt;
     img.classList.add('lazy');
     
-    // Add click event to open modal when image is clicked
-    img.addEventListener('click', () => openModal(img.src, image.alt));
+    // Add click event to open modal when image is loaded and clicked
+    img.addEventListener('click', () => {
+      if (img.src) { // Only open modal if image has been loaded
+        openModal(img.src, image.alt);
+      }
+    });
     
+    // Append elements to the container
+    imgContainer.appendChild(placeholder);
     imgContainer.appendChild(img);
     galleryElement.appendChild(imgContainer);
   });
@@ -178,26 +197,35 @@ function addImagesToGallery(imageArray, galleryElement) {
 function initLazyLoading() {
   const lazyImages = document.querySelectorAll('img.lazy');
   
-  // Create IntersectionObserver with appropriate threshold
+  // Create IntersectionObserver with larger rootMargin for better lazy load demonstration
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
-      // Load image when it's visible in the viewport (or getting close)
       if (entry.isIntersecting) {
         const img = entry.target;
         
-        // Start loading the image
-        loadImage(img).then(() => {
-          // Add loaded class to trigger fade-in effect
-          img.classList.add('loaded');
-        });
+        // Add a random delay to each image to better demonstrate lazy loading
+        const delay = Math.random() * 1500 + 500; // Between 500ms and 2000ms
         
-        // Stop observing this image once it's loaded
+        setTimeout(() => {
+          loadImage(img).then(() => {
+            // Add loaded class for fade-in effect
+            img.classList.add('loaded');
+            
+            // Hide the placeholder
+            const placeholder = img.previousElementSibling;
+            if (placeholder && placeholder.classList.contains('image-placeholder')) {
+              placeholder.classList.add('hidden');
+            }
+          });
+        }, delay);
+        
+        // Stop observing this image
         observer.unobserve(img);
       }
     });
   }, {
-    root: null, // Use viewport as root
-    rootMargin: '50px 0px', // Slightly extend the detection area
+    root: null, // Use viewport
+    rootMargin: '50px 0px', // Start loading when image is 50px from entering viewport
     threshold: 0.1 // Trigger when at least 10% of the image is visible
   });
   
@@ -205,6 +233,8 @@ function initLazyLoading() {
   lazyImages.forEach(img => {
     observer.observe(img);
   });
+  
+  console.log(`🔍 Observing ${lazyImages.length} images for lazy loading`);
 }
 
 async function loadImage(imgEl) {
@@ -213,18 +243,19 @@ async function loadImage(imgEl) {
       const src = imgEl.dataset.src;
       console.log('➡️ Loading image:', src);
       
-      // Create a new image object to preload the image
+      // Create a new image object to preload
       const tempImg = new Image();
       
-      // Set up load and error handlers
+      // Set handlers
       tempImg.onload = () => {
         imgEl.src = src;
-        imgEl.removeAttribute('data-src'); // Clean up data attribute
+        imgEl.removeAttribute('data-src');
         resolve();
       };
       
       tempImg.onerror = (e) => {
         console.error('Image load error:', e);
+        imgEl.classList.add('image-error');
         reject(e);
       };
       
