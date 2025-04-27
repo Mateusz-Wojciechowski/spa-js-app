@@ -124,7 +124,7 @@ function RenderGalleryPage() {
       <p class="lazy-load-notice"><i class="fas fa-info-circle"></i> Images load progressively as you scroll - keep scrolling to see more!</p>
     </section>
     
-    <h2 class="gallery-category">Spectacular Destinations</h2>
+    <h2 class="gallery-category">Spectacular Destinations and Our Team</h2>
     <div class="gallery-grid" id="destinations-gallery"></div>
     
   `;
