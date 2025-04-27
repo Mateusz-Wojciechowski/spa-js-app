@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>SPA PIAC TEST</title>
+  <title>Horizon Travels - Discover Your Next Adventure</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-
   <!-- reCAPTCHA explicit render -->
   <script
     src="https://www.google.com/recaptcha/api.js?onload=onloadRecaptcha&render=explicit"
@@ -15,19 +15,54 @@
 </head>
 <body>
   <header class="header">
-    <ul class="Header-links-ul">
-      <li class="header-link" id="about-link">About Me</li>
-      <li class="header-link" id="gallery-link">Gallery</li>
-      <li class="header-link" id="contact-link">Contact</li>
-    </ul>
-    <button id="theme-toggle">Toggle Theme</button>
+    <div class="logo">
+      <span><i class="fas fa-globe-americas"></i> Horizon Travels</span>
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-link" id="about-link">About Us</li>
+        <li class="nav-link" id="gallery-link">Gallery</li>
+        <li class="nav-link" id="contact-link">Contact</li>
+      </ul>
+    </nav>
+    <button id="theme-toggle" aria-label="Toggle dark mode">
+      <i class="fas fa-moon"></i>
+    </button>
   </header>
-
+  
   <main>
-    <h1 class="title">Hello World!</h1>
-    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry...</p>
+    <!-- Content will be dynamically loaded here -->
   </main>
-
+  
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4><i class="fas fa-globe-americas"></i> Horizon Travels</h4>
+        <p>Discover the world with us - unforgettable journeys await!</p>
+      </div>
+      <div class="footer-section">
+        <h4>Connect With Us</h4>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="?about">About Us</a></li>
+          <li><a href="?gallery">Our Gallery</a></li>
+          <li><a href="?contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Horizon Travels. All rights reserved.</p>
+    </div>
+  </footer>
+  
   <!-- Modal for gallery -->
   <div id="modal" class="modal hidden">
     <div class="modal-content">
@@ -35,7 +70,7 @@
       <img id="modal-img" src="" alt="Expanded image">
     </div>
   </div>
-
+  
   <script src="js/router.js"></script>
 </body>
 </html>
