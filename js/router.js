@@ -324,7 +324,7 @@ function RenderContactPage() {
   // Render reCAPTCHA widget
   if (typeof grecaptcha !== 'undefined') {
     grecaptcha.render('recaptcha-container', {
-      sitekey: '6LfrryUrAAAAACXpIrbhwlHy45KJ-vx8nY03C451'
+      sitekey: '6LdqgSYrAAAAAJp0FnZCehR0vEtP_jnv1WuLCpLj'
     });
   }
 
