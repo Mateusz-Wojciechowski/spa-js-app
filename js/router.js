@@ -243,24 +243,20 @@ async function loadImage(imgEl) {
       const src = imgEl.dataset.src;
       console.log('➡️ Loading image:', src);
       
-      // Create a new image object to preload
-      const tempImg = new Image();
-      
-      // Set handlers
-      tempImg.onload = () => {
-        imgEl.src = src;
+      // Ustaw handlers przed przypisaniem src, aby złapać zdarzenia
+      imgEl.onload = () => {
         imgEl.removeAttribute('data-src');
         resolve();
       };
       
-      tempImg.onerror = (e) => {
+      imgEl.onerror = (e) => {
         console.error('Image load error:', e);
         imgEl.classList.add('image-error');
         reject(e);
       };
       
-      // Start loading the image
-      tempImg.src = src;
+      // Inicjuj ładowanie obrazu bezpośrednio
+      imgEl.src = src;
     } catch (e) {
       console.error('Image load error:', e);
       reject(e);
